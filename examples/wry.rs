@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-License-Identifier: MIT
 
-use drag::{start_drag, DragItem, Image};
+use drag::{set_drag_source, start_drag, DragItem, Image};
 use tao::{
     dpi::LogicalSize,
     event::{Event, StartCause, WindowEvent},
@@ -101,6 +101,8 @@ fn main() -> wry::Result<()> {
         .with_accept_first_mouse(true)
         .build()?;
 
+    set_drag_source();
+
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
 
@@ -113,29 +115,18 @@ fn main() -> wry::Result<()> {
 
             Event::UserEvent(e) => match e {
                 UserEvent::StartDrag => {
-                    #[cfg(any(
-                        target_os = "windows",
-                        target_os = "macos",
-                        target_os = "ios",
-                        target_os = "android"
-                    ))]
                     let window = &window;
 
-                    #[cfg(not(any(
-                        target_os = "windows",
-                        target_os = "macos",
-                        target_os = "ios",
-                        target_os = "android"
-                    )))]
+                    #[cfg(feature = "gtk")]
                     let window = window.gtk_window();
 
                     start_drag(
-                        window,
+                        &window,
                         DragItem::Files(vec![std::path::PathBuf::from(
                             std::fs::canonicalize("examples/icon.png").unwrap(),
                         )]),
-                        Image::Raw(include_bytes!("../examples/icon.png").to_vec()),
-                        // Image::File("examples/icon.png".into()),
+                        // Image::Raw(include_bytes!("../examples/icon.png").to_vec()),
+                        Image::File("examples/icon.png".into()),
                     );
                 }
             },

@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 mod platform_impl;
 
-pub use platform_impl::start_drag;
+pub use platform_impl::*;
 
 /// Item to be dragged.
 pub enum DragItem {

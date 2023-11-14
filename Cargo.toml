@@ -3,6 +3,11 @@ name = "drag"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+default = ["x11"]
+gtk = []
+x11 = []
+
 [dependencies]
 raw-window-handle = "0.5"
 
@@ -13,6 +18,7 @@ objc = "0.2"
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies]
 gtk = "0.18"
 gdkx11 = "0.18"
+x11-dl = "2.21"
 
 [dev-dependencies]
 tao = "0.23"
